@@ -29,7 +29,7 @@ class CallbackTest {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--no-sandbox");
-        options.addArguments("--headless");
+//        options.addArguments("--headless");
         driver = new ChromeDriver(options);
         driver.get("http://localhost:9999");
     }
@@ -100,6 +100,17 @@ class CallbackTest {
         form.findElement(By.cssSelector("[role='button']")).click();
         String text = driver.findElement(By.cssSelector("[data-test-id='phone'] [class='input__sub']")).getText();
         assertEquals("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678.", text.trim());
+    }
+
+    @Test
+    void shouldGiveError() {
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Иван");
+        form.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+71231212123");
+        form.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        form.findElement(By.cssSelector("[role='button']")).click();
+        String text = driver.findElement(By.cssSelector("[data-test-id='name'] [class='input__sub']")).getText();
+        assertEquals("Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.", text.trim());
     }
 }
 
